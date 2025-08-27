@@ -41,7 +41,7 @@ const Hero = () => {
                 }}
                 className="relative z-10 mx-auto max-w-xl py-4 text-center text-lg font-normal text-neutral-600 dark:text-neutral-400"
             >
-                Get AI-powered mock interviews, instant feedback, and personalized tips to land your dream job.
+                Get completely free AI-powered mock interviews, instant feedback, and personalized tips to land your dream job. No subscriptions, no limits!
             </motion.p>
             <motion.div
                 initial={{
@@ -56,12 +56,12 @@ const Hero = () => {
                 }}
                 className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4"
             >
-                <button className="w-60 transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
+                <a href="/sign-in" className="w-60 transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 text-center">
                     Login
-                </button>
-                <button className="w-60 transform rounded-lg border border-gray-300 bg-white px-6 py-2 font-medium text-black transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-100 dark:border-gray-700 dark:bg-black dark:text-white dark:hover:bg-gray-900">
+                </a>
+                <a href="/sign-up" className="w-60 transform rounded-lg border border-gray-300 bg-white px-6 py-2 font-medium text-black transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-100 dark:border-gray-700 dark:bg-black dark:text-white dark:hover:bg-gray-900 text-center">
                     Sign Up
-                </button>
+                </a>
             </motion.div>
             <motion.div
                 initial={{

@@ -1,36 +1,153 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Free AI Mock Interview App
 
-## Getting Started
+A completely free AI-powered mock interview application built with Next.js, React, and Convex. Practice your interview skills with AI-generated questions and get instant feedback - no subscriptions, no limits!
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **🤖 AI Avatar Interviewer**: Realistic interview experience with animated AI avatar
+- **🎤 Voice Interaction**: AI speaks questions out loud and listens to your voice answers
+- **🎯 AI-Generated Questions**: Smart interview questions based on job descriptions or resume analysis
+- **📝 Interactive Interviews**: Answer questions one by one with a clean, intuitive interface
+- **🎉 Instant Feedback**: Get detailed feedback, ratings, and improvement suggestions
+- **🔐 User Authentication**: Secure sign-up and sign-in with Clerk
+- **💾 Persistent Storage**: Save your interview history and progress with Convex
+- **📱 Responsive Design**: Works perfectly on desktop, tablet, and mobile
+- **🎨 Modern UI**: Beautiful interface built with Tailwind CSS and Shadcn/ui
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Database**: Convex (real-time, serverless)
+- **Authentication**: Clerk
+- **Styling**: Tailwind CSS, Shadcn/ui
+- **AI**: Custom question generation (no external APIs needed!)
+- **Deployment**: Vercel (free tier)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Getting Started
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js 18+ 
+- npm or yarn
+- Convex account (free tier)
+- Clerk account (free tier)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd frontend
+   ```
 
-## Deploy on Vercel
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Set up environment variables**
+   Create a `.env.local` file:
+   ```env
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_key
+   CLERK_SECRET_KEY=your_clerk_secret
+   NEXT_PUBLIC_CONVEX_URL=your_convex_url
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Set up Convex**
+   ```bash
+   npx convex dev
+   ```
+
+5. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+6. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 📖 How to Use
+
+### 1. Create an Account
+- Sign up with your email or use social login
+- Complete your profile setup
+
+### 2. Create an Interview
+- Choose between resume upload or job description
+- For resume: Upload your PDF resume
+- For job description: Enter the job title and description
+
+### 3. Take the Interview
+- Answer each question thoughtfully
+- Use the STAR method for behavioral questions
+- Navigate between questions with Previous/Next buttons
+
+### 4. Get Feedback
+- Receive instant feedback and rating
+- Review improvement suggestions
+- Track your progress over time
+
+## 🔧 Customization
+
+### Adding New Question Types
+Edit `lib/ai-service.ts` to add more question categories:
+- General questions
+- Technical questions  
+- Behavioral questions
+- Role-specific questions
+
+### Modifying the UI
+- Update components in `app/_components/`
+- Modify styles in `tailwind.config.js`
+- Customize the color scheme and layout
+
+## 🌟 Why It's Completely Free
+
+- **No External AI APIs**: Uses smart templates and patterns instead of expensive AI services
+- **Free Voice Technology**: Uses built-in browser Web Speech API (no external voice services)
+- **Free Database**: Convex free tier provides generous limits
+- **Free Authentication**: Clerk free tier handles user management
+- **Free Hosting**: Deploy on Vercel for free
+- **No Rate Limiting**: Unlimited interviews for all users
+- **No Subscriptions**: One-time setup, forever free
+
+## 🚀 Deployment
+
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Ready for deployment"
+   git push origin main
+   ```
+
+2. **Deploy on Vercel**
+   - Connect your GitHub repository
+   - Add environment variables
+   - Deploy automatically
+
+3. **Update Convex**
+   - Deploy your Convex functions
+   - Update production environment variables
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest new features
+- Submit pull requests
+- Improve documentation
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🆘 Support
+
+If you need help:
+- Check the documentation
+- Open an issue on GitHub
+- Review the code examples
+
+---
+
+**Built with ❤️ for developers who want to practice interviews without breaking the bank!**
