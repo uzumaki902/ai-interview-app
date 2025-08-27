@@ -12,9 +12,17 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Jobdesc from './jobdesc';
 import Resupload from './resupload';
+import { useState } from "react";
 
 
 const CreateInterviewDialog = () => {
+    const [formData,setFormData]=useState<any>()
+    const onHandleInputChange=(field:string,value:string)=>{
+        setFormData((prev:any)=>({
+            ...prev,
+            [field]:value
+        }))
+    }
 
     return (
         <div>
@@ -38,7 +46,7 @@ const CreateInterviewDialog = () => {
                                     <TabsTrigger value="desc">Job desrcription</TabsTrigger>
                                 </TabsList>
                                 <TabsContent value="res"><Resupload /></TabsContent>
-                                <TabsContent value="desc"><Jobdesc /></TabsContent>
+                                <TabsContent value="desc"><Jobdesc onHandleInputChange={onHandleInputChange}  /></TabsContent>
                             </Tabs>
                         </DialogDescription>
                     </DialogHeader>

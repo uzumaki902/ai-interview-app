@@ -2,7 +2,7 @@ import React from 'react'
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
-const Jobdesc = () => {
+const Jobdesc = ({ onHandleInputChange }: any) => {
     return (
         <div className="max-w-lg mx-auto p-6 bg-white dark:bg-neutral-900 rounded-2xl shadow-md space-y-6">
             {/* Job Title */}
@@ -13,6 +13,7 @@ const Jobdesc = () => {
                 <Input
                     type="text"
                     placeholder="Type job title"
+                    onChange={(e) => onHandleInputChange('jobTitle', e.target.value)}
                     className="border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 />
             </div>
@@ -24,6 +25,7 @@ const Jobdesc = () => {
                 </label>
                 <Textarea
                     placeholder="Type job description"
+                    onChange={(e) => onHandleInputChange('jobTitle', e.target.value)}
                     className="border border-gray-300 dark:border-black-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all min-h-[120px]"
                 />
             </div>
