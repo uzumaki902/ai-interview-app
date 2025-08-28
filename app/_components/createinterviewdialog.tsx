@@ -12,6 +12,16 @@ import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const JobSchema = z.object({
+  jobTitle: z.string().min(2, 'Job title is too short').max(80, 'Job title is too long'),
+  jobDescription: z.string().min(20, 'Please provide at least 20 characters'),
+});
+
+type JobFormValues = z.infer<typeof JobSchema>;
 
 interface CreateInterviewDialogProps {
   onInterviewCreated?: () => void;
@@ -28,64 +38,60 @@ export default function CreateInterviewDialog({ onInterviewCreated }: CreateInte
   
   // Resume upload state
   const [resumeFile, setResumeFile] = useState<File | null>(null);
-  
-  // Job description state
-  const [jobTitle, setJobTitle] = useState("");
-  const [jobDescription, setJobDescription] = useState("");
+
+  // RHF for Job Description
+  const { register, handleSubmit, formState: { errors, isValid }, reset } = useForm<JobFormValues>({
+    resolver: zodResolver(JobSchema),
+    mode: 'onChange',
+    defaultValues: { jobTitle: '', jobDescription: '' }
+  });
 
   const handleResumeUpload = (file: File) => {
     setResumeFile(file);
   };
 
-  const handleSubmit = async () => {
+  const onSubmitJob = async (data: JobFormValues) => {
+    await createInterviewFlow({
+      type: 'job-description',
+      title: data.jobTitle,
+      description: data.jobDescription,
+    });
+  };
+
+  const createInterviewFlow = async (payload: { type: 'resume'|'job-description'; title: string; description?: string }) => {
     if (!user) {
       toast.error("Please sign in to create an interview");
       return;
     }
 
     setIsLoading(true);
-
     try {
-      let interviewData: any = {
+      const interviewData: any = {
         userId: user.id,
-        type: activeTab,
-        title: activeTab === "resume" ? "Resume-based Interview" : jobTitle,
+        type: payload.type,
+        title: payload.title,
       };
 
-      if (activeTab === "resume") {
+      if (payload.type === 'resume') {
         if (!resumeFile) {
-          toast.error("Please upload a resume");
+          toast.error("Please upload a resume (PDF)");
           setIsLoading(false);
           return;
         }
-        // For now, we'll just create the interview without file upload
-        // In a real app, you'd upload to Convex file storage
         interviewData.resumeUrl = "resume-uploaded";
       } else {
-        if (!jobTitle.trim() || !jobDescription.trim()) {
-          toast.error("Please fill in both job title and description");
-          setIsLoading(false);
-          return;
-        }
-        interviewData.description = jobDescription;
+        interviewData.description = payload.description;
       }
 
       const interviewId = await createInterview(interviewData);
-      
       toast.success("Interview created successfully!");
+      // reset
       setIsOpen(false);
-      
-      // Reset form
       setResumeFile(null);
-      setJobTitle("");
-      setJobDescription("");
-      
-      // Navigate to interview start page
+      reset();
+      // Navigate
       router.push(`/interview/${interviewId}`);
-      
-      if (onInterviewCreated) {
-        onInterviewCreated();
-      }
+      onInterviewCreated?.();
     } catch (error) {
       console.error("Error creating interview:", error);
       toast.error("Failed to create interview. Please try again.");
@@ -119,65 +125,73 @@ export default function CreateInterviewDialog({ onInterviewCreated }: CreateInte
               <div className="space-y-4">
                 <div className="text-center">
                   <p className="text-gray-600 mb-4">
-                    Upload your resume and we'll generate relevant interview questions
+                    Upload your resume (PDF) and we'll generate relevant interview questions
                   </p>
                   <FileUpload
                     onChange={(files: File[]) => handleResumeUpload(files[0])}
                   />
-                  {resumeFile && (
-                    <p className="text-sm text-green-600 mt-2">
-                      ✓ {resumeFile.name} selected
-                    </p>
+                  {resumeFile ? (
+                    <p className="text-sm text-green-600 mt-2">✓ {resumeFile.name} selected</p>
+                  ) : (
+                    <p className="text-sm text-red-600 mt-2">PDF required</p>
                   )}
+                </div>
+                <div className="flex justify-end">
+                  <Button
+                    onClick={() => createInterviewFlow({ type: 'resume', title: 'Resume-based Interview' })}
+                    disabled={isLoading || !resumeFile}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    {isLoading ? 'Creating...' : 'Create Interview'}
+                  </Button>
                 </div>
               </div>
             </TabsContent>
             
             <TabsContent value="job-description" className="mt-6">
-              <div className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmit(onSubmitJob)}>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Job Title *
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Job Title *</label>
                   <Input
-                    placeholder="e.g., Frontend Developer, Product Manager"
-                    value={jobTitle}
-                    onChange={(e) => setJobTitle(e.target.value)}
-                    className="w-full"
+                    placeholder="e.g., Frontend Developer"
+                    {...register('jobTitle')}
+                    className={errors.jobTitle ? 'border-red-500' : ''}
                   />
+                  {errors.jobTitle && (
+                    <p className="text-xs text-red-600 mt-1">{errors.jobTitle.message}</p>
+                  )}
                 </div>
-                
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Job Description *
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Job Description *</label>
                   <Textarea
                     placeholder="Paste the job description here..."
-                    value={jobDescription}
-                    onChange={(e) => setJobDescription(e.target.value)}
-                    className="w-full min-h-[120px]"
+                    {...register('jobDescription')}
+                    className={`min-h-[120px] ${errors.jobDescription ? 'border-red-500' : ''}`}
                   />
+                  {errors.jobDescription && (
+                    <p className="text-xs text-red-600 mt-1">{errors.jobDescription.message}</p>
+                  )}
                 </div>
-              </div>
+                <div className="flex justify-end space-x-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsOpen(false)}
+                    disabled={isLoading}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isLoading || !isValid}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    {isLoading ? 'Creating...' : 'Create Interview'}
+                  </Button>
+                </div>
+              </form>
             </TabsContent>
           </Tabs>
-          
-          <div className="mt-8 flex justify-end space-x-3">
-            <Button
-              variant="outline"
-              onClick={() => setIsOpen(false)}
-              disabled={isLoading}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              disabled={isLoading}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              {isLoading ? "Creating..." : "Create Interview"}
-            </Button>
-          </div>
         </div>
       </DialogContent>
     </Dialog>

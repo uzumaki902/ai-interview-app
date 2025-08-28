@@ -2,16 +2,10 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import {
   ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
 } from '@clerk/nextjs'
 import "./globals.css";
-import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { ConvexClientProvider } from "./ConvexClientProvider";
-
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: "website",
@@ -31,14 +25,13 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className={poppins.className}>
-          <ConvexClientProvider>{children}</ConvexClientProvider>
-
-
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <ConvexClientProvider>{children}</ConvexClientProvider>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
-
   );
 }
