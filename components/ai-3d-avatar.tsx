@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Stage } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import React, { useMemo, useRef } from "react";
 import * as THREE from "three";
 
@@ -125,11 +125,9 @@ export default function AI3DAvatar({ isSpeaking, isListening }: AI3DAvatarProps)
   return (
     <div className="w-full h-56 sm:h-64 md:h-72 rounded-lg overflow-hidden border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
       <Canvas shadows camera={{ position: [0, 1.5, 3], fov: 50 }}>
-        <ambientLight intensity={0.6} />
+        <ambientLight intensity={0.7} />
         <directionalLight position={[3, 5, 2]} intensity={1} castShadow />
-        <Stage intensity={0.5}>
-          <AvatarHead isSpeaking={isSpeaking} isListening={isListening} />
-        </Stage>
+        <AvatarHead isSpeaking={isSpeaking} isListening={isListening} />
         <OrbitControls enablePan={false} enableZoom={false} minPolarAngle={Math.PI/3} maxPolarAngle={Math.PI/2} />
       </Canvas>
     </div>
